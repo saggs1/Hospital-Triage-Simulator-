@@ -1,0 +1,59 @@
+from file_handler import read_queue, write_queue
+
+def add_patient():
+    name = input("Enter patient name: ")
+
+    print("Select category:")
+    print("1. Critical")
+    print("2. Serious")
+    print("3. Normal")
+
+    choice = input("Enter choice (1/2/3): ")
+
+    if choice == "1":
+        category = "Critical"
+        wait_time = 0
+    elif choice == "2":
+        category = "Serious"
+        wait_time = 10
+    elif choice == "3":
+        category = "Normal"
+        wait_time = 30
+    else:
+        print("Invalid choice!\n")
+        return
+
+    queue = read_queue()
+    queue.append([name, category, wait_time])
+    write_queue(queue)
+
+    print("Patient added successfully!\n")
+
+
+def process_patient():
+    queue = read_queue()
+
+    if len(queue) == 0:
+        print("No patients in queue\n")
+        return
+
+    patient = queue.pop(0)
+    write_queue(queue)
+
+    print("\nProcessing Patient")
+    print("Name:", patient[0])
+    print("Category:", patient[1])
+    print("Wait Time:", patient[2], "minutes\n")
+
+
+def show_queue():
+    queue = read_queue()
+
+    if len(queue) == 0:
+        print("Queue is empty\n")
+        return
+
+    print("\nCurrent Queue:")
+    for p in queue:
+        print(p[0], "-", p[1])
+    print()
